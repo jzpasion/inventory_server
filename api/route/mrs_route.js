@@ -14,5 +14,8 @@ router.get("/getMRS", (req, res) => {
     });
 });
 
+router.post("/addMRS" , (req ,res ) =>{
+    handler.addMrs()
+})
 
 module.exports = router;
