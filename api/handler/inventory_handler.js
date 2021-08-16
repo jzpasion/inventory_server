@@ -20,7 +20,6 @@ exports.getAllInventory = function (cb) {
 }
 
 exports.addInventory = function (item_name, type, quantity, unit_of_measure, unit_price, total, cb) {
-    console.log("ee");
     const sql = `INSERT INTO inventory_table (ITEM_NAME,
                                              TYPE,
                                              QUANTITY,

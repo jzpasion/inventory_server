@@ -14,4 +14,19 @@ router.get("/getDepartment" , (req ,res) =>{
     })
 })
 
+router.get("/getCompanyDepartment" , (req , res) =>{
+    const company = req.body.company;
+    if(company){
+        handler.getSpecificCompany(company,function(err,data){
+            if(err){
+                res.status(500).json({error:err})
+            }else{
+                res.status(200).json(data)
+            }
+        })
+    }else{  
+        res.status(500).json({message: 'Invalid Parameters!'})
+    }
+})
+
 module.exports = router;

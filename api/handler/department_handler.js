@@ -18,3 +18,14 @@ exports.getAllDepartment = function(cb){
         }
     })
 }
+
+exports.getSpecificCompany = function(company, cb){
+    var sql = `SELECT * FROM department_table WHERE COMPANY = '?'`
+    con.query(sql, [company], function(err , result){
+        if(err){
+            cb({status: "failed" , error:err})
+        }else{
+            cb(null,result)
+        }
+    })
+}
