@@ -33,4 +33,25 @@ router.post("/addPRS" , (req ,res )=>{
     }
 })
 
+router.put("/updatePRS:purchasing_id" , (req ,res) =>{
+    const purchasing_id = req.params.purchasing_id
+    const unit_price = req.body.unit_price
+    const total_price = req.body.total_price
+    const supplier = req.body.supplier
+    const status = req.body.status
+    const date_delivered = req.body.date_delivered
+
+    if(purchasing_id && unit_price && total_price && supplier && status && date_delivered){
+        handler.updatePRS(unit_price, total_price,supplier,status, date_delivered, purchasing_id , function(err,data){
+            if(err){
+                res.status(500).json({error:err})
+            }else{
+                res.status(200).json(data)
+            }
+        })
+    }else{
+        res.status(500).json({message: 'invalid Parameters!'})
+    }
+})
+
 module.exports = router;

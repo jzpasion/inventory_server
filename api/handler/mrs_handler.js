@@ -1,11 +1,11 @@
-var mysql = require("mysql");
-var config = require("../config");
+var mysql = require('mysql');
+var config = require('../config');
 
 var con = mysql.createConnection(config.dbConfig);
 
 con.connect(function (err) {
-    if(err) throw err
-});
+    if (err) throw err
+})
 
 exports.getAllMrs = function (cb) {
     var sql = `SELECT * FROM material_request_form`;
@@ -20,10 +20,13 @@ exports.getAllMrs = function (cb) {
 };
 
 exports.getMrsPurchasing = function(cb){
-    var sql = `SELECT material_request_form.MRS_ID,department_table.COMPANY ,project_table.CODE,material_request_form.DESCRIPTION , 
-    material_request_form.QUANTITY,material_request_form.UNIT,department_table.DEPARTMENT_NAME
-    FROM material_request_form LEFT JOIN department_table ON material_request_form.DEPARTMENT_ID = department_table.DEPARTMENT_ID
-     LEFT JOIN project_table on material_request_form.PROJECT_ID = project_table.PROJECT_ID`
+    var sql = `SELECT purchasing_table.PURCHASING_ID,department_table.COMPANY,material_request_form.REQUEST_BY, department_table.DEPARTMENT_NAME, 
+    purchasing_table.PRS_NUMBER, material_request_form.MRS_NUMBER , project_table.PROJECT_NAME, material_request_form.DESCRIPTION ,
+    material_request_form.QUANTITY , material_request_form.UNIT ,purchasing_table.UNIT_PRICE , purchasing_table.TOTAL_PRICE , purchasing_table.SUPPLIER , 
+    purchasing_table.DATE_REQUEST , purchasing_table.DATE_DELIVERED FROM purchasing_table 
+    LEFT JOIN material_request_form ON purchasing_table.MRS_ID = material_request_form.MRS_ID 
+    LEFT JOIN department_table ON material_request_form.DEPARTMENT_ID = department_table.DEPARTMENT_ID 
+    LEFT JOIN project_table ON purchasing_table.PROJECT_ID = project_table.PROJECT_ID`
 
      con.query(sql , function(err,result){
          if(err){
@@ -44,7 +47,7 @@ exports.addMrs = function ( mrs_number,request_by ,project_id , department_id  ,
                                                   DESCRIPTION,
                                                   QUANTITY,
                                                   UNIT)
-                VALUES (?,?,?,?,?,?,?,?)`;
+                VALUES (?,?,?,?,?,?,?,?,?)`;
 
     con.query(sql ,[mrs_number, request_by,project_id , department_id , date , item_number , description , quantity , unit] ,function(err , result){
         if(err){

@@ -7,6 +7,7 @@ const department = require("./api/route/department_router");
 const project = require('./api/route/project_route');
 const user = require('./api/route/user_route');
 const purchasing = require('./api/route/purchasing_route')
+const mrr = require("./api/route/mrr_route")
 
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -28,5 +29,6 @@ app.use("/api/department" , department);
 app.use("/api/project" , project);
 app.use("/api/user" , user);
 app.use("/api/purchasing" , purchasing)
+app.use("/api/mrr" , mrr);
 
 module.exports = app;

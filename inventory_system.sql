@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 16, 2021 at 08:31 AM
+-- Generation Time: Aug 20, 2021 at 10:28 AM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 8.0.8
 
@@ -111,15 +111,22 @@ INSERT INTO `inventory_table` (`ID`, `ITEM_NAME`, `TYPE`, `QUANTITY`, `UOM`, `UN
 CREATE TABLE `material_receive_form` (
   `MRR_ID` int(11) NOT NULL,
   `PROJECT_ID` int(11) NOT NULL,
-  `ITEM_NUMBER` int(11) NOT NULL,
-  `MRS_NUMBER` int(11) NOT NULL,
-  `DESCRIPTION` varchar(50) NOT NULL,
+  `MRS_ID` int(11) NOT NULL,
   `QUANTITY` int(11) NOT NULL,
-  `UNITS` varchar(50) NOT NULL,
   `UNIT_COST` int(11) NOT NULL,
   `SUB_TOTAL` int(11) NOT NULL,
-  `PREPARED_BY` varchar(50) NOT NULL
+  `DATE_DELIVERED` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `material_receive_form`
+--
+
+INSERT INTO `material_receive_form` (`MRR_ID`, `PROJECT_ID`, `MRS_ID`, `QUANTITY`, `UNIT_COST`, `SUB_TOTAL`, `DATE_DELIVERED`) VALUES
+(9, 2, 1, 5, 1200, 6000, '2021-08-20'),
+(10, 2, 2, 10, 163, 1630, '2021-08-20'),
+(11, 2, 6, 4, 963, 3852, '2021-08-20'),
+(12, 2, 2, 1, 0, 0, '2021-08-20');
 
 -- --------------------------------------------------------
 
@@ -155,7 +162,10 @@ INSERT INTO `material_request_form` (`MRS_ID`, `MRS_NUMBER`, `REQUEST_BY`, `PROJ
 (8, '44', '', 1, 1, '2021-08-06', 1, 'test 1 ', 1, 'te'),
 (9, '55', '', 1, 1, '2021-08-06', 2, 'test 2 ', 1, 'tea'),
 (10, '66', '', 1, 1, '2021-08-06', 3, 'test 6', 1, 'test 4'),
-(11, '77', '', 1, 18, '2021-08-11', 1, 'shion', 4, 'aaa');
+(11, '77', '', 1, 18, '2021-08-11', 1, 'shion', 4, 'aaa'),
+(12, '88', 'Haachama', 1, 18, '2021-08-19', 1, 'Waffle', 4, 'PCS'),
+(13, '88', 'Haachama', 1, 18, '2021-08-19', 2, 'Crab', 1, 'km'),
+(14, '99', 'Suisei', 2, 18, '2021-08-20', 1, 'keyboard', 1, 'pcs');
 
 -- --------------------------------------------------------
 
@@ -198,7 +208,7 @@ CREATE TABLE `purchasing_table` (
   `PROJECT_ID` int(11) NOT NULL,
   `UNIT_PRICE` int(11) NOT NULL,
   `TOTAL_PRICE` int(11) NOT NULL,
-  `SUPPLIER` int(11) NOT NULL,
+  `SUPPLIER` varchar(100) NOT NULL,
   `STATUS` varchar(50) NOT NULL,
   `DATE_DELIVERED` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -208,10 +218,12 @@ CREATE TABLE `purchasing_table` (
 --
 
 INSERT INTO `purchasing_table` (`PURCHASING_ID`, `DATE_REQUEST`, `PRS_NUMBER`, `MRS_ID`, `PROJECT_ID`, `UNIT_PRICE`, `TOTAL_PRICE`, `SUPPLIER`, `STATUS`, `DATE_DELIVERED`) VALUES
-(2, '2021-08-13', 369, 2, 4, 0, 0, 0, 'PENDING FOR APPROVAL', ''),
-(3, '2021-08-13', 369, 3, 4, 0, 0, 0, 'PENDING FOR APPROVAL', ''),
-(4, '2021-08-13', 369, 4, 4, 0, 0, 0, 'PENDING FOR APPROVAL', ''),
-(5, '2021-08-13', 369, 5, 4, 0, 0, 0, 'PENDING FOR APPROVAL', '');
+(2, '2021-08-13', 369, 2, 4, 6, 6, 'SM', 'PENDING FOR APPROVAL', 'NOT DELIVERED'),
+(3, '2021-08-13', 369, 3, 4, 0, 0, '0', 'PENDING FOR APPROVAL', 'NOT DELIVERED'),
+(4, '2021-08-13', 369, 4, 4, 0, 0, '0', 'PENDING FOR APPROVAL', 'NOT DELIVERED'),
+(5, '2021-08-13', 369, 5, 4, 0, 0, '0', 'PENDING FOR APPROVAL', 'NOT DELIVERED'),
+(6, '2021-08-19', 11, 12, 1, 3, 12, 'PC Config', 'DELIVERED', '2021-08-19'),
+(7, '2021-08-19', 11, 13, 1, 4, 4, 'SM', 'DELIVERED', '2021-08-19');
 
 -- --------------------------------------------------------
 
@@ -234,7 +246,8 @@ INSERT INTO `user_table` (`USER_ID`, `USERNAME`, `PASSWORD`, `DEPARTMENT`) VALUE
 (1, 'SdtAdmin', 'sdt*2021', 'sdt'),
 (2, 'Admin', 'l@goTronics*2021', 'admin'),
 (3, 'Warehouse', 'w@reh0usE*2021', 'warehouse'),
-(4, 'Purchasing', 'pUrch@sing*2021', 'purchasing');
+(4, 'Purchasing', 'pUrch@sing*2021', 'purchasing'),
+(5, 'test', 'test', 'purchasing');
 
 --
 -- Indexes for dumped tables
@@ -302,13 +315,13 @@ ALTER TABLE `inventory_table`
 -- AUTO_INCREMENT for table `material_receive_form`
 --
 ALTER TABLE `material_receive_form`
-  MODIFY `MRR_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `MRR_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `material_request_form`
 --
 ALTER TABLE `material_request_form`
-  MODIFY `MRS_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `MRS_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `project_table`
@@ -320,13 +333,13 @@ ALTER TABLE `project_table`
 -- AUTO_INCREMENT for table `purchasing_table`
 --
 ALTER TABLE `purchasing_table`
-  MODIFY `PURCHASING_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `PURCHASING_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `user_table`
 --
 ALTER TABLE `user_table`
-  MODIFY `USER_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `USER_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
