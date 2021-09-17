@@ -19,6 +19,22 @@ exports.getAllMrs = function (cb) {
     });
 };
 
+exports.getMrsDetailed = function(cb){
+    var sql = `SELECT material_request_form.MRS_ID , material_request_form.MRS_NUMBER ,material_request_form.REQUEST_BY , project_table.CODE ,project_table.PROJECT_NAME , 
+    department_table.DEPARTMENT_NAME , department_table.COMPANY , material_request_form.DATE , material_request_form.ITEM_NUMBER, 
+    material_request_form.DESCRIPTION,material_request_form.QUANTITY,material_request_form.UNIT 
+    FROM material_request_form LEFT JOIN project_table ON material_request_form.PROJECT_ID = project_table.PROJECT_ID 
+    LEFT JOIN department_table ON material_request_form.DEPARTMENT_ID = department_table.DEPARTMENT_ID`
+
+    con.query(sql,function(err,result){
+        if(err){
+            cb({status: 'failed' , error:err})
+        }else{
+            cb(null,result);
+        }
+    })
+}
+
 exports.getMrsPurchasing = function(cb){
     var sql = `SELECT purchasing_table.PURCHASING_ID,department_table.COMPANY,material_request_form.REQUEST_BY, department_table.DEPARTMENT_NAME, 
     purchasing_table.PRS_NUMBER, material_request_form.MRS_NUMBER , project_table.PROJECT_NAME, material_request_form.DESCRIPTION ,

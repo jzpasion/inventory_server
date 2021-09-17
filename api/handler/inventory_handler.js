@@ -43,3 +43,20 @@ exports.addInventory = function (item_name, type, quantity, unit_of_measure, uni
         }
     )
 }
+
+exports.updateInventory = function (item_name, type, quantity, unit_of_measure, unit_price, total, id, cb) {
+    const sql = `UPDATE inventory_table SET ITEM_NAME = ?,
+                                            TYPE = ?,
+                                            QUANTITY = ?,
+                                            UOM = ?,
+                                            UNIT_PRICE = ?,
+                                            TOTAL = ?
+                WHERE ID = ?`
+    con.query(sql, [item_name, type, quantity, unit_of_measure, unit_price, total, id], function (err, result) {
+        if (err) {
+            cb({ status: "failed", error: err }, null)
+        } else {
+            cb(null, result)
+        }
+    })
+}
