@@ -148,19 +148,16 @@ io.on('connection', socket => {
         })
     })
 
-    socket.on("addInven", function (item_name, type, quantity, unit_of_measure, unit_price, total, callback) {
+    socket.on("addInven", function (item_name, type, quantity, unit_of_measure, unit_price, total) {
         inventory_handler.addInventory(item_name, type, quantity, unit_of_measure, unit_price, total, function (err, data) {
             if (err) {
                 return err
             } else {
-                //  console.log(data);
+                socket.emit("update_inventory_table", getInventory(socket));
+                socket.broadcast.emit("update_inventory_table", getInventory(socket));
             }
         })
-        callback({
-            status: "ok"
-        });
-        socket.emit("update_inventory_table", getInventory(socket));
-        socket.broadcast.emit("update_inventory_table", getInventory(socket));
+
     })
     socket.on("disconnect", () => {
         console.log("Client Disconnected");
@@ -177,18 +174,15 @@ io.on('connection', socket => {
         })
     })
 
-    socket.on("addMrs", function (mrs_number, request_by, project_id, department_id, date, item_number, description, quantity, unit, callback) {
+    socket.on("addMrs", function (mrs_number, request_by, project_id, department_id, date, item_number, description, quantity, unit) {
         MRS_handler.addMrs(mrs_number, request_by, project_id, department_id, date, item_number, description, quantity, unit, function (err, data) {
             if (err) {
                 return err
             } else {
-                console.log(data);
+                socket.emit("update_mrs_table", getMrs(socket));
+                socket.broadcast.emit("update_mrs_table", getMrs(socket))   
             }
-            callback({
-                status: "ok"
-            });
-            socket.emit("update_mrs_table", getMrs(socket));
-            socket.broadcast.emit("update_mrs_table", getMrs(socket));
+            
         })
     })
 
@@ -197,11 +191,11 @@ io.on('connection', socket => {
             if (err) {
                 throw err
             } else {
-                console.log(result);
+                socket.emit("update_prs_table", getPurchasing(socket));
+                socket.broadcast.emit("update_prs_table", getPurchasing(socket));
             }
         })
-        socket.emit("update_prs_table", getPurchasing(socket));
-        socket.broadcast.emit("update_prs_table", getPurchasing(socket));
+
     })
 
     socket.on("updatePrs", function (unit_price, total_price, supplier, status, date_delivered, pr_id) {
@@ -209,23 +203,24 @@ io.on('connection', socket => {
             if (err) {
                 throw err
             } else {
-                console.log(result);
+                socket.emit("update_prs_table", getPurchasing(socket));
+                socket.broadcast.emit("update_prs_table", getPurchasing(socket));
             }
-            socket.emit("update_prs_table", getPurchasing(socket));
-            socket.broadcast.emit("update_prs_table", getPurchasing(socket));
+
         })
     })
 
-    socket.on("addMrr", function (prj_id, mrs_id, quantity, unit_cost, sub_total, date_delivered, cb) {
+    socket.on("addMrr", function (prj_id, mrs_id, quantity, unit_cost, sub_total, date_delivered) {
         MRR_handler.addMRR(prj_id, mrs_id, quantity, unit_cost, sub_total, date_delivered, function (err, result) {
             if (err) {
                 throw err
             } else {
-                console.log(result);
-                cb({ status: "ok" })
+                socket.emit("update_mrr_table", getMRR(socket));
+                socket.broadcast.emit("update_mrr_table", getMRR(socket));
             }
         })
     })
+    
 })
 
 
