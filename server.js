@@ -5,6 +5,7 @@ const MRS_handler = require('./api/handler/mrs_handler')
 const user_handler = require('./api/handler/user_handler')
 const purchasing = require('./api/handler/purchasing_handler')
 const MRR_handler = require('./api/handler/mrr_handler')
+const issuance_handler = require('./api/handler/issuance_handler')
 const http = require("http");
 const port = process.env.PORT || 8081;
 const app = require('./app');
@@ -93,6 +94,17 @@ const getMRSDetailed = async socket =>{
     })
 }
 
+const getIssuance = async socket =>{
+    issuance_handler.getAllIssuance(function(err,data){
+        if(err){
+            throw err
+        }else{
+            socket.emit("getIssuance" , data);
+            socket.broadcast.emit("getIssuance" , data)
+        }
+    })
+}
+
 io.on('connection', socket => {
     console.log('user connected');
     getInventory(socket);
@@ -102,9 +114,14 @@ io.on('connection', socket => {
     getPurchasing(socket);
     getMRR(socket);
     getMRSDetailed(socket);
+    getIssuance(socket);
+
+    socket.on("getIssuanceDetails" , () =>{
+        getIssuance(socket);
+    })
 
     socket.on("getDetailedMrs" , () =>{
-        MRS_handler.getMrsDetailed(socket);
+        getMRSDetailed(socket);
     })
 
     socket.on("getInventory", () => {
@@ -151,7 +168,7 @@ io.on('connection', socket => {
     socket.on("addInven", function (item_name, type, quantity, unit_of_measure, unit_price, total) {
         inventory_handler.addInventory(item_name, type, quantity, unit_of_measure, unit_price, total, function (err, data) {
             if (err) {
-                return err
+                throw err
             } else {
                 socket.emit("update_inventory_table", getInventory(socket));
                 socket.broadcast.emit("update_inventory_table", getInventory(socket));
@@ -166,7 +183,7 @@ io.on('connection', socket => {
     socket.on("updateInventory", function (item_name, type, quantity, unit_of_measure, unit_price, total, id) {
         inventory_handler.updateInventory(item_name, type, quantity, unit_of_measure, unit_price, total, id, function (err, data) {
             if (err) {
-                return err
+                throw err
             } else {
                 socket.emit("update_inventory_table", getInventory(socket));
                 socket.broadcast.emit("update_inventory_table", getInventory(socket));
@@ -174,13 +191,36 @@ io.on('connection', socket => {
         })
     })
 
-    socket.on("addMrs", function (mrs_number, request_by, project_id, department_id, date, item_number, description, quantity, unit) {
-        MRS_handler.addMrs(mrs_number, request_by, project_id, department_id, date, item_number, description, quantity, unit, function (err, data) {
+    socket.on("updateQuantityInventory" , function(quantity , id){
+        inventory_handler.updateInventoryQuantity(quantity , id, function(err,data){
+            if(err){
+                throw err
+            }else{
+                socket.emit("update_inventory_table", getInventory(socket));
+                socket.broadcast.emit("update_inventory_table", getInventory(socket));
+            }
+        })
+    })
+
+    socket.on("addMrs", function (mrs_number, request_by, project_id, department_id, date, item_number, description, quantity, unit , type) {
+        MRS_handler.addMrs(mrs_number, request_by, project_id, department_id, date, item_number, description, quantity, unit,type , function (err, data) {
             if (err) {
-                return err
+                throw err
             } else {
-                socket.emit("update_mrs_table", getMrs(socket));
-                socket.broadcast.emit("update_mrs_table", getMrs(socket))   
+                socket.emit("update_mrs_table", getMRSDetailed(socket));
+                socket.broadcast.emit("update_mrs_table", getMRSDetailed(socket))   
+            }
+            
+        })
+    })
+
+    socket.on("addIssuance", function (mrs_number, request_by, project_id, department_id, date, item_number, description, quantity, unit , type) {
+        issuance_handler.addIssuance(mrs_number, request_by, project_id, department_id, date, item_number, description, quantity, unit,type, function (err, data) {
+            if (err) {
+                throw err
+            } else {
+                socket.emit("update_issuance_table", getIssuance(socket));
+                socket.broadcast.emit("update_issuance_table", getIssuance(socket))   
             }
             
         })
@@ -210,8 +250,8 @@ io.on('connection', socket => {
         })
     })
 
-    socket.on("addMrr", function (prj_id, mrs_id, quantity, unit_cost, sub_total, date_delivered) {
-        MRR_handler.addMRR(prj_id, mrs_id, quantity, unit_cost, sub_total, date_delivered, function (err, result) {
+    socket.on("addMrr", function (prj_id, mrs_id, quantity, unit_cost, sub_total, type, date_delivered) {
+        MRR_handler.addMRR(prj_id, mrs_id, quantity, unit_cost, sub_total, type , date_delivered, function (err, result) {
             if (err) {
                 throw err
             } else {

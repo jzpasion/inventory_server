@@ -60,3 +60,17 @@ exports.updateInventory = function (item_name, type, quantity, unit_of_measure, 
         }
     })
 }
+
+exports.updateInventoryQuantity = function(quantity , id ,cb){
+    const sql = `UPDATE inventory_table SET QUANTITY = ? WHERE ID = ?`
+
+    con.query(sql , [quantity , id ] , function(err,result){
+        if (err){
+            cb({status: "failed" , error:err} , null)
+        }else{
+            cb(null , result)
+        }
+    })
+
+
+}
