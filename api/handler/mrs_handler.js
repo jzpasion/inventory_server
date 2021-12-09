@@ -63,8 +63,9 @@ exports.addMrs = function ( mrs_number,request_by ,project_id , department_id  ,
                                                   DESCRIPTION,
                                                   QUANTITY,
                                                   UNIT,
-                                                  TYPE)
-                VALUES (?,?,?,?,?,?,?,?,?,?)`;
+                                                  TYPE,
+                                                  DATE_ADDED)
+                VALUES (?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP())`;
 
     con.query(sql ,[mrs_number, request_by,project_id , department_id , date , item_number , description , quantity , unit , type] ,function(err , result){
         if(err){

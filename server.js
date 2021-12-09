@@ -9,6 +9,7 @@ const issuance_handler = require('./api/handler/issuance_handler')
 const http = require("http");
 const port = process.env.PORT || 8081;
 const app = require('./app');
+const e = require('cors');
 const server = http.createServer(app);
 const io = require('socket.io')(server, {
     cors: {
@@ -208,7 +209,9 @@ io.on('connection', socket => {
                 throw err
             } else {
                 socket.emit("update_mrs_table", getMRSDetailed(socket));
+                socket.emit("update_mrs_table_simple", getMrs(socket));
                 socket.broadcast.emit("update_mrs_table", getMRSDetailed(socket))   
+                socket.broadcast.emit("update_mrs_table_simple", getMrs(socket))  
             }
             
         })
@@ -226,20 +229,26 @@ io.on('connection', socket => {
         })
     })
 
-    socket.on("addPrs", function (date_request, prs_number, mrs_id, project_id) {
-        purchasing.addPRS(date_request, prs_number, mrs_id, project_id, function (err, result) {
-            if (err) {
+    socket.on("addPrs", function (date_request, mrs_id, project_id) {
+        purchasing.getAllPurchase(function(err,data){
+            if(err){
                 throw err
-            } else {
-                socket.emit("update_prs_table", getPurchasing(socket));
-                socket.broadcast.emit("update_prs_table", getPurchasing(socket));
+            }else{
+                var lastItem = data[data.length-1]
+                purchasing.addPRS(date_request, lastItem.PRS_NUMBER+1, mrs_id, project_id, function (err, result) {
+                    if (err) {
+                        throw err
+                    } else {
+                        socket.emit("update_prs_table", getPurchasing(socket));
+                        socket.broadcast.emit("update_prs_table", getPurchasing(socket));
+                    }
+                })
             }
         })
-
     })
 
     socket.on("updatePrs", function (unit_price, total_price, supplier, status, date_delivered, pr_id) {
-        purchasing.updatePRS(unit_price, total_price, supplier, status, date_delivered, pr_id, function (err, result) {
+        purchasing.updatePRS(unit_price, total_price, supplier, status, date_delivered, pr_id, function (err, data) {
             if (err) {
                 throw err
             } else {
@@ -247,16 +256,61 @@ io.on('connection', socket => {
                 socket.broadcast.emit("update_prs_table", getPurchasing(socket));
             }
 
+        })
+    })
+    
+    socket.on("updatePrsStatus", function(status , pr_id){
+        purchasing.updatePRSStatus(status , pr_id, function(err,data){
+            if(err){
+                throw err
+            }else{
+                socket.emit("update_prs_table", getPurchasing(socket));
+                socket.broadcast.emit("update_prs_table", getPurchasing(socket));
+            }
         })
     })
 
     socket.on("addMrr", function (prj_id, mrs_id, quantity, unit_cost, sub_total, type, date_delivered) {
-        MRR_handler.addMRR(prj_id, mrs_id, quantity, unit_cost, sub_total, type , date_delivered, function (err, result) {
+        MRR_handler.addMRR(prj_id, mrs_id, quantity, unit_cost, sub_total, type , date_delivered, function (err, data) {
             if (err) {
                 throw err
             } else {
+              
                 socket.emit("update_mrr_table", getMRR(socket));
                 socket.broadcast.emit("update_mrr_table", getMRR(socket));
+            }
+        })
+    })
+
+    socket.on("addDepartment",function(dep_name , company){
+        department_handler.addDepartment(dep_name , company , function(err, data){
+            if(err){
+                throw err
+            }else{
+                socket.emit("update_department_table", getDepartment(socket));
+                socket.broadcast.emit("update_department_table", getDepartment(socket));
+            }
+        })
+    })
+
+    socket.on("addProject",function(code , client , park , country , project_name , start_date , end_date){
+        project_handler.addProject(code, client ,park , country , project_name, start_date , end_date, function(err, data){
+            if(err){
+                throw err
+            }else{
+                socket.emit("update_project_table", getProject(socket));
+                socket.broadcast.emit("update_project_table", getProject(socket));
+            }
+        })
+    })
+
+    socket.on("updateProject" , function(code , client , park , country , project_name , start_date , end_date , prj_id){
+        project_handler.updateProject(code , client , park , country , project_name , start_date , end_date , prj_id , function(err,data){
+            if(err){
+                throw err
+            }else{
+                socket.emit("update_project_table", getProject(socket));
+                socket.broadcast.emit("update_project_table", getProject(socket));
             }
         })
     })

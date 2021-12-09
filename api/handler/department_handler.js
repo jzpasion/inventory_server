@@ -29,3 +29,17 @@ exports.getSpecificCompany = function(company, cb){
         }
     })
 }
+
+exports.addDepartment = function(dep_name , company , cb){
+    var sql = `INSERT INTO department_table (DEPARTMENT_NAME,
+                                             COMPANY,
+                                             DATE_ADDED)
+                VALUES (?,?,CURRENT_TIMESTAMP())`;
+    con.query(sql , [dep_name , company], function(err,result){
+        if(err){
+            cb({status: 'failed' , error:err})
+        }else{
+            cb(null , result)
+        }
+    })
+}

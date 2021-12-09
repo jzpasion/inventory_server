@@ -24,7 +24,7 @@ exports.getAllIssuance = function(cb){
 }
 
 exports.addIssuance = function ( mrs_number,request_by ,project_id , department_id  , date , item_number , description , quantity , unit , type, cb){
-    var sql = `INSERT INTO issuance_report (ISSUANCE_ID ,
+    var sql = `INSERT INTO issuance_report (MRS_NUMBER ,
                                             REQUEST_BY,
                                             PROJECT_ID,
                                             DEPARTMENT_ID,
@@ -33,8 +33,9 @@ exports.addIssuance = function ( mrs_number,request_by ,project_id , department_
                                             DESCRIPTION,
                                             QUANTITY,
                                             UNIT,
-                                            TYPE)
-                VALUES (?,?,?,?,?,?,?,?,?,?)`;
+                                            TYPE,
+                                            DATE_ADDED)
+                VALUES (?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP())`;
 
     con.query(sql ,[mrs_number, request_by,project_id , department_id , date , item_number , description , quantity , unit, type] ,function(err , result){
         if(err){

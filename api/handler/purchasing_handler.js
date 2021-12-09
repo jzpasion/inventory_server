@@ -32,8 +32,9 @@ exports.addPRS = function(date_request , prs_number , mrs_id , project_id,cb ){
                                                MRS_ID,
                                                PROJECT_ID,
                                                STATUS,
-                                               DATE_DELIVERED)
-                VALUES (?,?,?,?,"PENDING FOR APPROVAL","NOT DELIVERED")`
+                                               DATE_DELIVERED,
+                                               DATE_ADDED)
+                VALUES (?,?,?,?,"PENDING FOR APPROVAL","NOT DELIVERED",CURRENT_TIMESTAMP())`
     
     con.query(sql ,[date_request, prs_number,mrs_id,project_id],function(err, result){
         if(err){
@@ -61,4 +62,16 @@ exports.updatePRS = function(unit_price , total_price , supplier , status, date_
             cb(null,result)
         }
     })
+}
+
+exports.updatePRSStatus = function(status , purchasing_id , cb) {
+    var sql = `UPDATE purchasing_table SET  STATUS=? WHERE PURCHASING_ID = ? `
+    con.query(sql, [status , purchasing_id] , function(err,result){
+        if(err){
+            cb({status: 'failed' , error:err})
+        }else{
+            cb(null, result)
+        }
+    })
+    
 }

@@ -25,8 +25,9 @@ exports.addInventory = function (item_name, type, quantity, unit_of_measure, uni
                                              QUANTITY,
                                              UOM,
                                              UNIT_PRICE,
-                                             TOTAL)
-                    VALUES (?,?,?,?,?,?) `;
+                                             TOTAL,
+                                             DATE_ADDED)
+                    VALUES (?,?,?,?,?,?,CURRENT_TIMESTAMP()) `;
     con.query(sql, [
         item_name,
         type,
