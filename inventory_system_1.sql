@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 14, 2024 at 09:52 AM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Generation Time: Aug 20, 2021 at 10:28 AM
+-- Server version: 10.4.20-MariaDB
+-- PHP Version: 8.0.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,37 +30,35 @@ SET time_zone = "+00:00";
 CREATE TABLE `department_table` (
   `DEPARTMENT_ID` int(11) NOT NULL,
   `DEPARTMENT_NAME` varchar(50) NOT NULL,
-  `COMPANY` varchar(15) NOT NULL,
-  `DATE_ADDED` date NOT NULL DEFAULT current_timestamp()
+  `COMPANY` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `department_table`
 --
 
-INSERT INTO `department_table` (`DEPARTMENT_ID`, `DEPARTMENT_NAME`, `COMPANY`, `DATE_ADDED`) VALUES
-(1, 'Sculpting', 'Themics', '2024-04-14'),
-(2, 'Model Preparation', 'Themics', '2024-04-14'),
-(3, 'Casting', 'Themics', '2024-04-14'),
-(4, 'Assembly', 'Themics', '2024-04-14'),
-(5, 'Detailing', 'Themics', '2024-04-14'),
-(6, 'Sanding', 'Themics', '2024-04-14'),
-(7, 'Metal', 'Themics', '2024-04-14'),
-(8, 'Priming of Metal', 'Themics', '2024-04-14'),
-(9, 'Carpentry', 'Themics', '2024-04-14'),
-(10, 'Crating', 'Themics', '2024-04-14'),
-(11, 'Finishing', 'Themics', '2024-04-14'),
-(12, 'Packing and Loading', 'Themics', '2024-04-14'),
-(13, 'Admin', 'Themics', '2024-04-14'),
-(14, 'Creative', 'Themics', '2024-04-14'),
-(15, 'Marketing', 'Themics', '2024-04-14'),
-(16, 'Costing', 'Themics', '2024-04-14'),
-(17, 'Admin', 'Lagotronics', '2024-04-14'),
-(18, 'Electronics', 'Lagotronics', '2024-04-14'),
-(19, 'Mechanical', 'Lagotronics', '2024-04-14'),
-(20, 'Engineering', 'Lagotronics', '2024-04-14'),
-(21, 'Programming', 'Lagotronics', '2024-04-14'),
-(22, 'test1', 'Themics', '2024-04-14');
+INSERT INTO `department_table` (`DEPARTMENT_ID`, `DEPARTMENT_NAME`, `COMPANY`) VALUES
+(1, 'Sculpting', 'Themics'),
+(2, 'Model Preparation', 'Themics'),
+(3, 'Casting', 'Themics'),
+(4, 'Assembly', 'Themics'),
+(5, 'Detailing', 'Themics'),
+(6, 'Sanding', 'Themics'),
+(7, 'Metal', 'Themics'),
+(8, 'Priming of Metal', 'Themics'),
+(9, 'Carpentry', 'Themics'),
+(10, 'Crating', 'Themics'),
+(11, 'Finishing', 'Themics'),
+(12, 'Packing and Loading', 'Themics'),
+(13, 'Admin', 'Themics'),
+(14, 'Creative', 'Themics'),
+(15, 'Marketing', 'Themics'),
+(16, 'Costing', 'Themics'),
+(17, 'Admin', 'Lagotronics'),
+(18, 'Electronics', 'Lagotronics'),
+(19, 'Mechanical', 'Lagotronics'),
+(20, 'Engineering', 'Lagotronics'),
+(21, 'Programming', 'Lagotronics');
 
 -- --------------------------------------------------------
 
@@ -107,26 +105,6 @@ INSERT INTO `inventory_table` (`ID`, `ITEM_NAME`, `TYPE`, `QUANTITY`, `UOM`, `UN
 -- --------------------------------------------------------
 
 --
--- Table structure for table `issuance_report`
---
-
-CREATE TABLE `issuance_report` (
-  `ISSUANCE_ID` int(11) NOT NULL,
-  `MRS_NUMBER` int(11) NOT NULL,
-  `REQUEST_BY` varchar(200) NOT NULL,
-  `DESCRIPTION` varchar(200) NOT NULL,
-  `QUANTITY` int(11) NOT NULL,
-  `UNIT` int(11) NOT NULL,
-  `TYPE` int(11) NOT NULL,
-  `PROJECT_ID` int(11) NOT NULL,
-  `DEPARTMENT_ID` int(11) NOT NULL,
-  `DATE` date NOT NULL,
-  `ITEM_NUMBER` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `material_receive_form`
 --
 
@@ -137,19 +115,18 @@ CREATE TABLE `material_receive_form` (
   `QUANTITY` int(11) NOT NULL,
   `UNIT_COST` int(11) NOT NULL,
   `SUB_TOTAL` int(11) NOT NULL,
-  `DATE_DELIVERED` varchar(50) NOT NULL,
-  `TYPE` varchar(200) NOT NULL
+  `DATE_DELIVERED` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `material_receive_form`
 --
 
-INSERT INTO `material_receive_form` (`MRR_ID`, `PROJECT_ID`, `MRS_ID`, `QUANTITY`, `UNIT_COST`, `SUB_TOTAL`, `DATE_DELIVERED`, `TYPE`) VALUES
-(9, 2, 1, 5, 1200, 6000, '2021-08-20', ''),
-(10, 2, 2, 10, 163, 1630, '2021-08-20', ''),
-(11, 2, 6, 4, 963, 3852, '2021-08-20', ''),
-(12, 2, 2, 1, 0, 0, '2021-08-20', '');
+INSERT INTO `material_receive_form` (`MRR_ID`, `PROJECT_ID`, `MRS_ID`, `QUANTITY`, `UNIT_COST`, `SUB_TOTAL`, `DATE_DELIVERED`) VALUES
+(9, 2, 1, 5, 1200, 6000, '2021-08-20'),
+(10, 2, 2, 10, 163, 1630, '2021-08-20'),
+(11, 2, 6, 4, 963, 3852, '2021-08-20'),
+(12, 2, 2, 1, 0, 0, '2021-08-20');
 
 -- --------------------------------------------------------
 
@@ -167,29 +144,28 @@ CREATE TABLE `material_request_form` (
   `ITEM_NUMBER` int(11) NOT NULL,
   `DESCRIPTION` varchar(150) NOT NULL,
   `QUANTITY` int(11) NOT NULL,
-  `UNIT` varchar(50) NOT NULL,
-  `TYPE` varchar(200) NOT NULL
+  `UNIT` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `material_request_form`
 --
 
-INSERT INTO `material_request_form` (`MRS_ID`, `MRS_NUMBER`, `REQUEST_BY`, `PROJECT_ID`, `DEPARTMENT_ID`, `DATE`, `ITEM_NUMBER`, `DESCRIPTION`, `QUANTITY`, `UNIT`, `TYPE`) VALUES
-(1, '1', '', 1, 17, '2021-08-06', 1, 'test', 1, 'aa', ''),
-(2, '22', '', 4, 19, '2021-08-06', 1, 'kkk', 1, 'uuu', ''),
-(3, '22', '', 4, 19, '2021-08-06', 2, '777', 1, '55', ''),
-(4, '22', '', 4, 19, '2021-08-06', 3, '5', 1, '6', ''),
-(5, '22', '', 4, 19, '2021-08-06', 4, '7', 1, '5', ''),
-(6, '33', '', 2, 18, '2021-08-06', 1, 'ddda', 3, 'aaa', ''),
-(7, '33', '', 2, 18, '2021-08-06', 2, 'ssss', 3, 'zzz', ''),
-(8, '44', '', 1, 1, '2021-08-06', 1, 'test 1 ', 1, 'te', ''),
-(9, '55', '', 1, 1, '2021-08-06', 2, 'test 2 ', 1, 'tea', ''),
-(10, '66', '', 1, 1, '2021-08-06', 3, 'test 6', 1, 'test 4', ''),
-(11, '77', '', 1, 18, '2021-08-11', 1, 'shion', 4, 'aaa', ''),
-(12, '88', 'Haachama', 1, 18, '2021-08-19', 1, 'Waffle', 4, 'PCS', ''),
-(13, '88', 'Haachama', 1, 18, '2021-08-19', 2, 'Crab', 1, 'km', ''),
-(14, '99', 'Suisei', 2, 18, '2021-08-20', 1, 'keyboard', 1, 'pcs', '');
+INSERT INTO `material_request_form` (`MRS_ID`, `MRS_NUMBER`, `REQUEST_BY`, `PROJECT_ID`, `DEPARTMENT_ID`, `DATE`, `ITEM_NUMBER`, `DESCRIPTION`, `QUANTITY`, `UNIT`) VALUES
+(1, '1', '', 1, 17, '2021-08-06', 1, 'test', 1, 'aa'),
+(2, '22', '', 4, 19, '2021-08-06', 1, 'kkk', 1, 'uuu'),
+(3, '22', '', 4, 19, '2021-08-06', 2, '777', 1, '55'),
+(4, '22', '', 4, 19, '2021-08-06', 3, '5', 1, '6'),
+(5, '22', '', 4, 19, '2021-08-06', 4, '7', 1, '5'),
+(6, '33', '', 2, 18, '2021-08-06', 1, 'ddda', 3, 'aaa'),
+(7, '33', '', 2, 18, '2021-08-06', 2, 'ssss', 3, 'zzz'),
+(8, '44', '', 1, 1, '2021-08-06', 1, 'test 1 ', 1, 'te'),
+(9, '55', '', 1, 1, '2021-08-06', 2, 'test 2 ', 1, 'tea'),
+(10, '66', '', 1, 1, '2021-08-06', 3, 'test 6', 1, 'test 4'),
+(11, '77', '', 1, 18, '2021-08-11', 1, 'shion', 4, 'aaa'),
+(12, '88', 'Haachama', 1, 18, '2021-08-19', 1, 'Waffle', 4, 'PCS'),
+(13, '88', 'Haachama', 1, 18, '2021-08-19', 2, 'Crab', 1, 'km'),
+(14, '99', 'Suisei', 2, 18, '2021-08-20', 1, 'keyboard', 1, 'pcs');
 
 -- --------------------------------------------------------
 
@@ -205,20 +181,18 @@ CREATE TABLE `project_table` (
   `COUNTRY` varchar(50) NOT NULL,
   `PROJECT_NAME` varchar(100) NOT NULL,
   `START_DATE` date NOT NULL,
-  `END_DATE` date NOT NULL,
-  `DATE_ADDED` date NOT NULL DEFAULT current_timestamp()
+  `END_DATE` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `project_table`
 --
 
-INSERT INTO `project_table` (`PROJECT_ID`, `CODE`, `CLIENT`, `PARK`, `COUNTRY`, `PROJECT_NAME`, `START_DATE`, `END_DATE`, `DATE_ADDED`) VALUES
-(1, 'TPI 00001', '', '', '', 'Pelican', '2021-08-05', '0000-00-00', '2024-04-14'),
-(2, 'TPI 00002', '', '', '', 'Santa\'s Village Brace Bridge', '2021-08-05', '0000-00-00', '2024-04-14'),
-(3, 'TPI 00003', '', '', '', 'IAPPA Show', '2021-08-05', '0000-00-00', '2024-04-14'),
-(4, 'TPI 00006', '', '', '', 'Babyland Amiland Pteranodon and Signage', '2021-08-05', '0000-00-00', '2024-04-14'),
-(5, '000', '', '', '', 'hhh', '2024-04-14', '2024-04-26', '2024-04-14');
+INSERT INTO `project_table` (`PROJECT_ID`, `CODE`, `CLIENT`, `PARK`, `COUNTRY`, `PROJECT_NAME`, `START_DATE`, `END_DATE`) VALUES
+(1, 'TPI 00001', '', '', '', 'Pelican', '2021-08-05', '0000-00-00'),
+(2, 'TPI 00002', '', '', '', 'Santa\'s Village Brace Bridge', '2021-08-05', '0000-00-00'),
+(3, 'TPI 00003', '', '', '', 'IAPPA Show', '2021-08-05', '0000-00-00'),
+(4, 'TPI 00006', '', '', '', 'Babyland Amiland Pteranodon and Signage', '2021-08-05', '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -245,7 +219,7 @@ CREATE TABLE `purchasing_table` (
 
 INSERT INTO `purchasing_table` (`PURCHASING_ID`, `DATE_REQUEST`, `PRS_NUMBER`, `MRS_ID`, `PROJECT_ID`, `UNIT_PRICE`, `TOTAL_PRICE`, `SUPPLIER`, `STATUS`, `DATE_DELIVERED`) VALUES
 (2, '2021-08-13', 369, 2, 4, 6, 6, 'SM', 'PENDING FOR APPROVAL', 'NOT DELIVERED'),
-(3, '2021-08-13', 369, 3, 4, 7, 7, '0', 'PENDING FOR PURCHASING', 'NOT DELIVERED'),
+(3, '2021-08-13', 369, 3, 4, 0, 0, '0', 'PENDING FOR APPROVAL', 'NOT DELIVERED'),
 (4, '2021-08-13', 369, 4, 4, 0, 0, '0', 'PENDING FOR APPROVAL', 'NOT DELIVERED'),
 (5, '2021-08-13', 369, 5, 4, 0, 0, '0', 'PENDING FOR APPROVAL', 'NOT DELIVERED'),
 (6, '2021-08-19', 11, 12, 1, 3, 12, 'PC Config', 'DELIVERED', '2021-08-19'),
@@ -292,12 +266,6 @@ ALTER TABLE `inventory_table`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `issuance_report`
---
-ALTER TABLE `issuance_report`
-  ADD PRIMARY KEY (`ISSUANCE_ID`);
-
---
 -- Indexes for table `material_receive_form`
 --
 ALTER TABLE `material_receive_form`
@@ -335,19 +303,13 @@ ALTER TABLE `user_table`
 -- AUTO_INCREMENT for table `department_table`
 --
 ALTER TABLE `department_table`
-  MODIFY `DEPARTMENT_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `DEPARTMENT_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `inventory_table`
 --
 ALTER TABLE `inventory_table`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1138;
-
---
--- AUTO_INCREMENT for table `issuance_report`
---
-ALTER TABLE `issuance_report`
-  MODIFY `ISSUANCE_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `material_receive_form`
@@ -365,7 +327,7 @@ ALTER TABLE `material_request_form`
 -- AUTO_INCREMENT for table `project_table`
 --
 ALTER TABLE `project_table`
-  MODIFY `PROJECT_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `PROJECT_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `purchasing_table`
