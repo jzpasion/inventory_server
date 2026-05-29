@@ -15,7 +15,7 @@ router.get("/getDepartment" , (req ,res) =>{
 })
 
 router.get("/getCompanyDepartment" , (req , res) =>{
-    const company = req.body.company;
+    const company = req.query.company;
     if(company){
         handler.getSpecificCompany(company,function(err,data){
             if(err){

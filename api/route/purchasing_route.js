@@ -33,7 +33,7 @@ router.post("/addPRS" , (req ,res )=>{
     }
 })
 
-router.put("/updatePRS:purchasing_id" , (req ,res) =>{
+router.put("/updatePRS/:purchasing_id" , (req ,res) =>{
     const purchasing_id = req.params.purchasing_id
     const unit_price = req.body.unit_price
     const total_price = req.body.total_price

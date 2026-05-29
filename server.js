@@ -9,7 +9,6 @@ const issuance_handler = require("./api/handler/issuance_handler");
 const http = require("http");
 const port = process.env.PORT || 8081;
 const app = require("./app");
-const e = require("cors");
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {

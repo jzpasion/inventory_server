@@ -47,7 +47,6 @@ exports.addMRR = function (
     sql,
     [prj_id, mrs_id, quantity, unit_cost, sub_total, type, date_delivered],
     function (err, result) {
-      console.log(mrs_id);
       if (err) {
         cb({ status: "failed", error: err });
       } else {
