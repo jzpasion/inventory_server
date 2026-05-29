@@ -26,6 +26,7 @@ router.get("/getMrsPurchasing" , (req ,res) =>{
 
 router.post("/addMRS" , (req ,res ) =>{
     const mrs_number = req.body.mrs_number
+    const request_by = req.body.request_by
     const project_id = req.body.project_id
     const department_id = req.body.department_id
     const date = req.body.date
@@ -33,8 +34,9 @@ router.post("/addMRS" , (req ,res ) =>{
     const description = req.body.description
     const quantity = req.body.quantity
     const unit = req.body.unit
-    if(mrs_number && project_id && department_id && date && item_number && description && quantity && unit ){
-        handler.addMrs(mrs_number , project_id , department_id , date , item_number , description , quantity , unit , function(err,data){
+    const type = req.body.type
+    if(mrs_number && request_by && project_id && department_id && date && item_number && description && quantity && unit && type ){
+        handler.addMrs(mrs_number , request_by , project_id , department_id , date , item_number , description , quantity , unit , type , function(err,data){
             if(err){
                 res.status(500).json({error:err})
             }else{

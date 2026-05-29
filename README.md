@@ -194,14 +194,14 @@ Successful responses return `200` with the query result; failures return `500`.
 | ------ | ------------------------ | ----------------------------------------------- | ----------- |
 | `GET`  | `/api/getMRS`            | List all material requests                      | —           |
 | `GET`  | `/api/getMrsPurchasing`  | List purchasing view joined to MRS/dept/project | —           |
-| `POST` | `/api/addMRS`            | Create a material request                       | `mrs_number`, `project_id`, `department_id`, `date`, `item_number`, `description`, `quantity`, `unit` |
+| `POST` | `/api/addMRS`            | Create a material request                       | `mrs_number`, `request_by`, `project_id`, `department_id`, `date`, `item_number`, `description`, `quantity`, `unit`, `type` |
 
 ### Department — `/api/department`
 
 | Method | Endpoint                              | Description                       | Body fields |
 | ------ | ------------------------------------- | --------------------------------- | ----------- |
 | `GET`  | `/api/department/getDepartment`       | List all departments              | —           |
-| `GET`  | `/api/department/getCompanyDepartment`| List departments for a company    | `company` (read from body) |
+| `GET`  | `/api/department/getCompanyDepartment`| List departments for a company    | query string: `?company=...` |
 
 ### Project — `/api/project`
 
@@ -221,14 +221,14 @@ Successful responses return `200` with the query result; failures return `500`.
 | ------ | ----------------------------------------- | ------------------------------------------ | ------ |
 | `GET`  | `/api/purchasing/getPRS`                  | List all purchase requests (enriched join) | —      |
 | `POST` | `/api/purchasing/addPRS`                  | Create a purchase request (`STATUS` defaults to `PENDING FOR APPROVAL`) | body: `date_request`, `prs_number`, `mrs_id`, `project_id` |
-| `PUT`  | `/api/purchasing/updatePRS:purchasing_id` | Update price/supplier/status/delivery date | route param: `purchasing_id`; body: `unit_price`, `total_price`, `supplier`, `status`, `date_delivered` |
+| `PUT`  | `/api/purchasing/updatePRS/:purchasing_id` | Update price/supplier/status/delivery date | route param: `purchasing_id`; body: `unit_price`, `total_price`, `supplier`, `status`, `date_delivered` |
 
 ### Material Receive (MRR) — `/api/mrr`
 
 | Method | Endpoint              | Description                       | Body fields |
 | ------ | --------------------- | --------------------------------- | ----------- |
 | `GET`  | `/api/mrr/getMRR`     | List all material receive records | —           |
-| `POST` | `/api/mrr/addMRR`     | Create a material receive record  | `prj_id`, `mrs_id`, `quantity`, `unit_cost`, `grand_total`, `date_delivered` |
+| `POST` | `/api/mrr/addMRR`     | Create a material receive record  | `prj_id`, `mrs_id`, `quantity`, `unit_cost`, `sub_total`, `type`, `date_delivered` |
 
 ## Socket.IO Events
 
@@ -342,14 +342,6 @@ in production:
   (e.g. `updateInventory`, `updateInventoryQuantity`, `addDepartment`, `addProject`,
   `updateProject`, `getMrsDetailed`, `updatePRSStatus`) — some of these are reachable
   only via Socket.IO.
-- **Endpoints to double-check before relying on them:**
-  - `POST /api/addMRS` and `POST /api/mrr/addMRR` call their handlers with fewer
-    arguments than the handler signature expects, so columns can be mis-mapped.
-  - `PUT /api/purchasing/updatePRS:purchasing_id` is missing a `/` before the route
-    param (likely intended `/updatePRS/:purchasing_id`).
-  - `GET /api/department/getCompanyDepartment` reads its filter from the request
-    **body** on a `GET`, and `getSpecificCompany`'s SQL quotes the `?` placeholder
-    (`'?'`), which prevents parameter binding.
 - **Migration:** uses the legacy `mysql` driver; migrating to `mysql2` would be a
   near drop-in upgrade and adds connection pooling and Promise support.
 

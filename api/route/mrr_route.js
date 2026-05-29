@@ -20,11 +20,12 @@ router.post("/addMRR" , (req ,res) =>{
     const mrs_id = req.body.mrs_id
     const quantity = req.body.quantity
     const unit_cost = req.body.unit_cost
-    const sub_total = req.body.grand_total
+    const sub_total = req.body.sub_total
+    const type = req.body.type
     const date_delivered = req.body.date_delivered
 
-    if(prj_id && mrs_id && quantity && unit_cost && sub_total && date_delivered){
-        handler.addMRR(prj_id , mrs_id, quantity, unit_cost , sub_total,date_delivered,  function(err,data){
+    if(prj_id && mrs_id && quantity && unit_cost && sub_total && type && date_delivered){
+        handler.addMRR(prj_id , mrs_id, quantity, unit_cost , sub_total, type, date_delivered,  function(err,data){
             if(err){
                 res.status(500).json({error:err})
             }else{
